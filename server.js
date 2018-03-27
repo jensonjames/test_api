@@ -22,6 +22,16 @@ app.get('/', (req, res) => res.send('Hello Test API World!'))
 var routes = require('./api/routes/accbalroutes'); //importing route
 routes(app); //register the route
 
+app.get("/webhook", function (req, res) {
+  if (req.query["hub.verify_token"] === "this_is_my_token") {
+    console.log("Verified webhook");
+    res.status(200).send(req.query["hub.challenge"]);
+  } else {
+    console.error("Verification failed. The tokens do not match.");
+    res.sendStatus(403);
+  }
+});
+
 
 app.listen(port);
 
